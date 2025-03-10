@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }} - Anime Details</title>
+    {% load static %}
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("{% static 'img/bg.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .overlay {
+            backdrop-filter: blur(2px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: -1;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 15px;
+            width: 85%;
+            max-width: 1200px;
+            padding: 30px;
+            box-sizing: border-box;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            color: #a6dcef;
+            margin-bottom: 20px;
+            width: 100%;
+            text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Left Section: Movie Poster, Title, and Action Buttons */
+        .movie-poster {
+            flex: 1 1 300px;
+            max-width: 350px;
+            text-align: center;
+        }
+
+        .movie-poster img {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.8);
+        }
+
+        .movie-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #a6dcef;
+            margin-top: 15px;
+            text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.6);
+        }
+
+        .action-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .action-buttons a {
+            background-color: #a6dcef;
+            color: #1a1a1a;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .action-buttons a:hover {
+            background-color: #a6dcef;
+            box-shadow: 0px 4px 10px rgba(87, 162, 197, 0.5);
+            transform: translateY(-2px);
+        }
+
+        /* Right Section: Movie Details */
+        .movie-details {
+            flex: 2 1 500px;
+            max-width: 700px;
+            font-size: 1rem;
+            line-height: 1.8;
+            color: #e6e6e6;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .movie-details p {
+            margin: 5px 0;
+        }
+
+        .movie-details strong {
+            font-weight: bold;
+            color: #a6dcef;
+        }
+
+        .movie-details a {
+            color: #a6dcef;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .movie-details a:hover {
+            color: #a6dcef;
+        }
+
+        /* Back Button */
+        .back-button-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .back-button {
+            padding: 12px 30px;
+            background-color: #a6dcef;
+            border-radius: 50px;
+            color: #1a1a1a;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            text-decoration: none;
+        }
+
+        .back-button:hover {
+            background-color: #a6dcef;
+            box-shadow: 0px 4px 10px rgba(86, 171, 177, 0.5);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                align-items: center;
+                padding: 20px;
+            }
+
+            .movie-poster {
+                margin-bottom: 20px;
+            }
+
+            .movie-details {
+                width: 100%;
+                max-width: 100%;
+                text-align: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <!-- Left Section -->
+        <div class="movie-poster">
+            <img src="{{ anime.image_url  }}" alt="Poster of {{ anime.name }}">
+            <div class="movie-title">{{ anime.name }}</div>
+            <div class="action-buttons">
+                <a href="https://hianime.to/" target="_blank">Watch Now</a>
+                <a href="{% url 'add_to_watchlist' anime.anime_id %}">Add to Watchlist</a>
+                <a href="{% url 'main' %}">Back to Anime</a>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+<div class="movie-details">
+    <p><strong>Title:</strong> {{ anime.name }}</p>
+    
+    <!-- Display genres as a list -->
+    <p><strong>Genres:</strong> 
+        {% for genre in genres_list %}
+            {{ genre }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+
+    <p><strong>Episodes:</strong> {{ anime.episodes }}</p>
+    <p><strong>Studio:</strong> {{ anime.studios }}</p>
+    <p><strong>Rating:</strong> {{ anime.rating }}</p>
+    <p><strong>Popularity:</strong> {{ anime.members }}</p>
+    <p><strong>Synopsis:</strong> {{ anime.synopsis }}</p>
+</div>
+
+
+    </div>
+</body>
+</html>

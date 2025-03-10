@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background: url("{% static 'img/bg.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 450px;
+            background: rgba(30, 30, 30, 0.5);
+            padding: 25px 40px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.4);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            max-height: 90vh;
+            overflow-y: auto;
+            backdrop-filter: blur(20px);
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: #a6dcef;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: #f0f0f0;
+            margin-bottom: 5px;
+        }
+
+        input {
+            background: rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            border: 1px solid #a6dcef;
+            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 12px;
+            width: 100%;
+            font-size: 1rem;
+        }
+
+        input:focus {
+            outline: none;
+            box-shadow: 0px 0px 8px rgba(166, 220, 239, 0.8);
+        }
+
+        .btn-custom {
+            background-color: #5da3fa;
+            color: #ffffff;
+            border: none;
+            padding: 12px;
+            width: 100%;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 5px;
+            margin-top: 12px;
+            transition: background 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: #4c8fd4;
+        }
+
+        .footer {
+            text-align: center;
+            color: #cccccc;
+            margin-top: 15px;
+        }
+
+        .footer a {
+            color: #a6dcef;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .alert {
+            margin-bottom: 20px;
+            font-size: 1rem;
+            color: #ffffff;
+            background-color: rgba(93, 163, 250, 0.8);
+            border: none;
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        .alert.error {
+            background-color: #e74c3c;
+        }
+
+        .alert.success {
+            background-color: #2ecc71;
+        }
+
+        @media (max-width: 576px) {
+            .container {
+                margin-top: 5%;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .btn-custom {
+                padding: 10px;
+            }
+
+            input {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <h2>Register</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="username">Username</label>
+            <input type="text" id="username" name="username" placeholder="Enter your username" required>
+
+            <label for="full_name">Full Name</label>
+            <input type="text" id="full_name" name="full_name" placeholder="Enter your full name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
+            <label for="phone">Phone</label>
+            <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+
+            <label for="confirm_password">Confirm Password</label>
+            <input type="password" id="confirm_password" name="confirm_password" placeholder="Confirm your password" required>
+
+            <button type="submit" class="btn-custom">Register</button>
+        </form>
+        <div class="footer">
+            <p>Already have an account? <a href="{% url 'login' %}">Sign In</a></p>
+        </div>
+    </div>
+</body>
+</html>
