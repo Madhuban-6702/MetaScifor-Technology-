@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ my_info.name }} - Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-blue-50 text-gray-800 font-sans">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md py-4">
+        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <a href="#" class="text-2xl font-bold text-blue-600">{{ my_info.name }}</a>
+            <div class="space-x-6 hidden md:flex">
+                <a href="#about" class="text-gray-700 hover:text-blue-600 transition">About</a>
+                <a href="#projects" class="text-gray-700 hover:text-blue-600 transition">Projects</a>
+                <a href="#skills" class="text-gray-700 hover:text-blue-600 transition">Skills</a>
+                <a href="#education" class="text-gray-700 hover:text-blue-600 transition">Education</a>
+                <a href="#certifications" class="text-gray-700 hover:text-blue-600 transition">Certifications</a>
+                <a href="#contact" class="text-gray-700 hover:text-blue-600 transition">Contact</a>
+            </div>
+            <div class="md:hidden">
+                <button id="menu-toggle" class="text-gray-700 focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Hero Section -->
+    <section id="hero" class="bg-blue-900 text-white py-24 px-6 text-center">
+        <div class="max-w-3xl mx-auto">
+            <h1 class="text-4xl font-extrabold mb-4">Hi, I'm {{ my_info.name }}</h1>
+            <p class="text-xl mb-6">
+                {{ my_info.about }}
+            </p>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="bg-blue-100 py-20 px-6">
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-3xl font-semibold text-center mb-8">Projects</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+                {% for project in my_info.projects %}
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                    <h4 class="text-xl font-semibold text-blue-600">{{ project }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-20 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl font-semibold mb-8">Skills</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                {% for skill in my_info.skills %}
+                <div class="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300">
+                    <h4 class="text-lg font-semibold text-blue-600">{{ skill }}</h4>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="bg-blue-100 py-20 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl font-semibold mb-8">Education</h2>
+            <div class="space-y-6">
+                {% for education in my_info.education %}
+                <div class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                    <p class="text-xl font-semibold text-blue-600">{{ education }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Certifications Section -->
+    <section id="certifications" class="bg-blue-100 py-20 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl font-semibold mb-8">Certifications</h2>
+            <ul class="list-none space-y-4">
+                {% for certification in my_info.certifications %}
+                <li class="bg-white p-6 rounded-lg shadow-lg hover:shadow-xl transition-all duration-300">
+                    <p class="text-xl font-semibold text-blue-600">{{ certification.name }}</p>
+                    {% if certification.link %}
+                    <a href="{{ certification.link }}" target="_blank" class="text-blue-500 hover:text-blue-700">Verify</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="bg-blue-100 py-20 px-6">
+        <div class="max-w-6xl mx-auto text-center">
+            <h2 class="text-3xl font-semibold mb-8">Contact</h2>
+            <p class="text-lg text-gray-700">Email: {{ my_info.contact.email }}</p>
+            <p class="text-lg text-gray-700 mb-4">LinkedIn: <a href="{{ my_info.contact.linkedin }}" target="_blank" class="text-blue-600">{{ my_info.name }}</a></p>
+            <p class="text-lg text-gray-700 mb-4">Phone: {{ my_info.contact.phone }}</p>
+            <p class="text-lg text-gray-700">Location: {{ my_info.contact.location }}</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-blue-600 text-white py-6 text-center">
+        <p>&copy; 2025 {{ my_info.name }}. All rights reserved.</p>
+    </footer>
+
+    <!-- Mobile Menu Script -->
+    <script>
+        const menuToggle = document.getElementById("menu-toggle");
+        menuToggle.addEventListener("click", () => {
+            const menuItems = document.querySelector(".md\\:hidden");
+            menuItems.classList.toggle("block");
+        });
+    </script>
+
+</body>
+
+</html>
