@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #6E8EF7, #A777E3);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .container {
+            width: 400px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #f5f5f5;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #4D61FC, #B375E3);
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            background: linear-gradient(90deg, #3950FC, #9B5BE3);
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .floating {
+            position: absolute;
+            width: 140px;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            filter: blur(25px);
+            animation: float 5s ease-in-out infinite alternate;
+        }
+
+        .circle-1 { top: 10%; left: 10%; }
+        .circle-2 { bottom: 12%; right: 12%; width: 160px; height: 160px; }
+
+        @keyframes float {
+            from { transform: translateY(0); }
+            to { transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating circle-1"></div>
+    <div class="floating circle-2"></div>
+
+    <div class="container">
+        <h1>Expense Tracker</h1>
+        <p>Track your expenses seamlessly and gain financial freedom.</p>
+        <a href="{% url 'login' %}" class="btn">Login</a>
+        <a href="{% url 'register' %}" class="btn">Register</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filter Transactions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #6E8EF7, #A777E3);
+            overflow-x: hidden;
+            background-attachment: fixed;
+            padding-top: 80px;
+        }
+
+        header {
+            width: 100%;
+            padding: 15px 30px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            border-radius: 0 0 12px 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .header-buttons a {
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-left: 15px;
+        }
+
+        .header-buttons a:hover {
+            background: rgba(255, 255, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 600px;
+            padding: 25px 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 120px;
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 8px;
+            color: #fff;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 18px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.3);
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        button {
+            padding: 14px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(90deg, #6A11CB, #2575FC);
+            color: #ffffff;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s, color 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.5);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+            color: #fff;
+        }
+
+        th {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        a.download {
+            text-decoration: none;
+            color: #fff;
+            font-weight: 600;
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #6A11CB, #2575FC);
+            margin-top: 20px;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        a.download:hover {
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Expense Tracker</h1>
+        <div class="header-buttons">
+            <a href="{% url 'dashboard' %}">Dashboard</a>
+            <a href="{% url 'transaction' %}">Add Transaction</a>
+            <a href="{% url 'logout' %}">Logout</a>
+        </div>
+    </header>
+
+    <div class="container">
+        <h2>Filter Transactions</h2>
+        <form method="POST">
+            {% csrf_token %}
+            <label for="from_date">From Date:</label>
+            <input type="date" id="from_date" name="from_date" required>
+            <label for="to_date">To Date:</label>
+            <input type="date" id="to_date" name="to_date" required>
+            <button type="submit">Filter</button>
+        </form>
+        {% if transactions %}
+        <table>
+        <thead>
+        <tr>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Amount</th>
+        </tr>
+        </thead>
+            <tbody>
+            {% for transaction in transactions %}
+        <tr>
+            <td>{{ transaction.date }}</td>
+            <td>{{ transaction.model_name }}</td>
+            <td>
+                {% if transaction.model_name == 'Income' %}
+                    {{ transaction.source }}
+                {% else %}
+                    {{ transaction.category }}
+                {% endif %}
+            </td>
+            <td>₹ {{ transaction.amount }}</td>
+        </tr>
+        {% endfor %}
+            </tbody>
+         </table>
+        <a href="{% url 'download_pdf' %}?from_date={{ from_date }}&to_date={{ to_date }}" class="download">Download PDF</a>
+        {% endif %}
+        {% if not transactions %}
+        <p>No transactions found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>
