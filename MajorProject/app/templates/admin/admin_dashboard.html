@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">Admin Dashboard</a>
+            <a href="{% url 'admin:index' %}" class="btn btn-outline-light">Go to Admin Panel</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <h2 class="mb-4">Welcome, {{ request.user.username }} 👋</h2>
+
+        <!-- Total Bookings & Total Revenue -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card text-white bg-primary mb-3">
+                    <div class="card-header">Total Bookings</div>
+                    <div class="card-body">
+                        <h3>{{ total_bookings }}</h3>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card text-white bg-success mb-3">
+                    <div class="card-header">Total Revenue</div>
+                    <div class="card-body">
+                        <h3>₹{{ total_revenue }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Latest Bookings & User Stats + Top Picks -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-info text-white">Latest Bookings</div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for booking in latest_bookings %}
+                            <li class="list-group-item">
+                                {{ booking.name }} - ₹{{ booking.total_price }} ({{ booking.date }})
+                            </li>
+                            {% empty %}
+                            <li class="list-group-item">No recent bookings.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header bg-secondary text-white">User Statistics</div>
+                    <div class="card-body">
+                        <p>Total Users: {{ total_users }}</p>
+                        <p>Active Users: {{ active_users }}</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header bg-warning text-white">Top Trek Picks</div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for trek in top_trek_picks %}
+                            <li class="list-group-item">{{ trek.name }} - {{ trek.num_bookings }} bookings</li>
+                            {% empty %}
+                            <li class="list-group-item">No popular treks yet.</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">Revenue Overview</div>
+                    <div class="card-body">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header bg-dark text-white">Bookings Overview</div>
+                    <div class="card-body">
+                        <canvas id="bookingsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        canvas {
+            width: 100% !important;
+            height: 300px !important; /* Adjust height to match both charts */
+        }
+    </style>
+    <script>
+        window.onload = function() {
+            var revenueLabels = {{ user_revenue_labels|safe }};
+            var revenueData = {{ user_revenue_values|safe }};
+            var bookingLabels = {{ user_booking_labels|safe }};
+            var bookingData = {{ user_booking_values|safe }};
+    
+            var ctxRevenue = document.getElementById('revenueChart').getContext('2d');
+            new Chart(ctxRevenue, {
+                type: 'bar',
+                data: {
+                    labels: revenueLabels,
+                    datasets: [{
+                        label: 'Revenue per User (₹)',
+                        data: revenueData,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    aspectRatio: 2  // Ensures equal chart proportions
+                }
+            });
+    
+            var ctxBookings = document.getElementById('bookingsChart').getContext('2d');
+            new Chart(ctxBookings, {
+                type: 'pie',
+                data: {
+                    labels: bookingLabels,
+                    datasets: [{
+                        label: 'Total Bookings per User',
+                        data: bookingData,
+                        backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    aspectRatio: 2  // Ensures equal chart proportions
+                }
+            });
+        };
+    </script>
+</body>
+</html>

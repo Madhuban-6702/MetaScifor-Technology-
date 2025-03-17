@@ -1,0 +1,510 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Treks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'img/img.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 15px 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        /* Container Styling */
+        .container {
+            max-width: 1700px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-top: 100px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .trek-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            padding: 50px 20px;
+        }
+
+        .trek-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+
+        .trek-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .btn {
+            background: transparent; 
+            border: 2px solid white; 
+            color: white; 
+            text-decoration: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 5px; 
+            margin-top: 10px;
+            font-weight: bold; 
+        }
+
+        .btn:hover {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        /* Popup Styles */
+        .popup-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6); 
+            backdrop-filter: blur(65px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .popup-content {
+            background: transparent;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            gap: 25px;
+            width: 80%;
+            max-width: 900px;
+            border-radius: 10px;
+            width: 65%;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(50px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .popup-left {
+            flex: 1;
+            padding-right: 20px;
+            text-align: left;
+        }
+
+        .popup-left img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+        .popup-left h2 {
+            margin: 15px 0;
+            color: white;
+        }
+        .popup-left p {
+            margin: 15px 0;
+            color: white;
+        }
+
+        .popup-right {
+            flex: 1;
+            text-align: left;
+            position: relative;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.1); 
+            border-radius: 8px;
+            color: white;
+            backdrop-filter: blur(20px); 
+        }
+
+        .popup-right input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            background: rgba(255, 255, 255, 0.3); 
+            color: white;
+            border-radius: 5px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: red;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+
+
+        .pagination {
+            margin-bottom: 10px; 
+            text-align: center;
+        }
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #ddd;
+            text-decoration: none;
+            color: white;
+            border-radius: 5px;
+        }
+        .pagination span {
+            display: inline-block;
+            padding: 8px 12px;
+            font-weight: bold;
+        }
+        .pagination a:hover {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            /* Navbar */
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+                padding: 10px;
+            }
+
+            .navbar a {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            /* Trek Cards */
+            .trek-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 30px 10px;
+            }
+
+            /* Remove blur from odd-numbered trek cards */
+            .trek-card:nth-child(odd) {
+                backdrop-filter: none;
+                background: rgba(255, 255, 255, 0.2); /* Slightly visible */
+            }
+
+            /* Keep even-numbered trek cards blurred */
+            .trek-card:nth-child(even) {
+                backdrop-filter: blur(5px);
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .trek-card {
+                padding: 15px;
+                text-align: center;
+            }
+
+            .trek-card img {
+                height: 200px;
+            }
+
+            /* Popup */
+            .popup-content {
+                flex-direction: column;
+                width: 90%;
+                padding: 15px;
+            }
+
+            .popup-left, .popup-right {
+                width: 100%;
+                padding: 15px;
+                text-align: center;
+            }
+
+            .popup-left img {
+                height: 200px;
+            }
+
+            .popup-right input {
+                padding: 8px;
+            }
+
+            .close-btn {
+                top: 5px;
+                right: 5px;
+                padding: 4px 8px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            /* Smaller screens */
+            .trek-container {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .btn {
+                padding: 8px 12px;
+                font-size: 14px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div class="navbar">
+        <div>
+            <a href="{% url 'home' %}" class="home-btn">Sahyadri Trails🏔️</a>
+        </div>
+        <div>
+            <a href="{% url 'explore_treks' %}">Explore</a>
+            <a href="{% url 'bookings_page' %}">Bookings</a>
+            <a href="{% url 'booking_details' %}">View Details</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        </div>
+    </div>
+
+    <!-- Trek Listings -->
+    <div class="container">
+        <h1>Available Treks</h1>
+        <div class="trek-container">
+            {% for trek in treks %}
+            <div class="trek-card">
+                <img src="{{ trek.image.url }}" alt="{{ trek.name }}">
+                <h2>{{ trek.name }}</h2>
+                <p><strong>Difficulty:</strong> {{ trek.difficulty }}</p>
+                <p><strong>Season:</strong> {{ trek.season }}</p>
+                <p><strong>Duration:</strong> {{ trek.duration }}</p>
+                <p><strong>Price:</strong> ₹{{ trek.price }} per person</p>
+                <p><strong>Pickup Location:</strong> {{ trek.pickup_location }}</p>
+                <p><strong>Drop Location:</strong> {{ trek.drop_location }}</p>
+                <p><strong>Meals Included:</strong> {{ trek.meals }}</p>
+                <p><strong>Description:</strong> {{ trek.description }}</p>
+
+                <button class="btn" 
+                    onclick="showPopup('{{ trek.trek_id }}', '{{ trek.name }}', '{{ trek.image.url }}', '{{ trek.difficulty }}', '{{ trek.season }}', '{{ trek.pickup_location }}', '{{ trek.price }}', '{{ trek.pickup_location }}', '{{ trek.drop_location }}', '{{ trek.meals }}')">
+                    Book Now
+                </button>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+
+    <!-- Popup Booking Form -->
+    <div id="popupContainer" class="popup-container">
+        <div class="popup-content">
+            <!-- Left: Trek Details -->
+            <div class="popup-left">
+                <img id="popupImage" src="" alt="">
+                <h2 id="popupTitle"></h2>
+                <p><strong>Difficulty:</strong> <span id="popupDifficulty"></span></p>
+                <p><strong>Season:</strong> <span id="popupSeason"></span></p>
+                <p><strong>Pickup Location:</strong> <span id="popupPickup"></span></p>
+                <p><strong>Price:</strong> ₹<span id="popupPrice"></span> per person</p>
+            </div>
+
+            <!-- Right: Booking Form -->
+            <div class="popup-right">
+                <button class="close-btn" onclick="closePopup()">X</button>
+                <form method="POST" id="bookingForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="trek_id" id="trek_id">
+                    <label>Name:</label>
+                    <input type="text" name="name" required>
+            
+                    <label>Email:</label>
+                    <input type="email" name="email" required>
+            
+                    <label>Date:</label>
+                    <input type="date" name="date" id="dateInput" required>
+            
+                    <label for="number_of_people">Number of People:</label>
+                    <input type="number" name="number_of_people" min="1" required oninput="calculatePrice(this)">
+            
+                    <p id="priceContainer" style="display: none;">Total Price: ₹<span id="totalPrice">0</span></p>
+            
+                    <button type="submit" class="btn">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="pagination">
+        {% if treks.has_previous %}
+            <a href="?page=1">First</a>
+            <a href="?page={{ treks.previous_page_number }}">Previous</a>
+        {% endif %}
+    
+        <span>Page {{ treks.number }} of {{ treks.paginator.num_pages }}</span>
+    
+        {% if treks.has_next %}
+            <a href="?page={{ treks.next_page_number }}">Next</a>
+            <a href="?page={{ treks.paginator.num_pages }}">Last</a>
+        {% endif %}
+    </div>
+    
+
+    <script>
+    document.getElementById("bookingForm").addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent default form submission
+
+        let trekId = document.getElementById("trek_id").value; // Get trek_id
+
+        console.log("Trek ID before submission:", trekId); // Debugging output
+
+        if (!trekId) {
+            alert("Error: Trek ID is missing!");
+            return; // Stop submission if trek_id is missing
+        }
+
+        let formData = new FormData(this);
+        let csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value; // Get CSRF token
+
+        fetch("/create-booking/", {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "X-Requested-With": "XMLHttpRequest",
+            },
+            body: formData,
+        })
+        .then(response => response.text()) // First, get response as text
+        .then(data => {
+            console.log("Raw server response:", data); // Log full response
+            try {
+                let jsonData = JSON.parse(data); // Try parsing JSON
+                if (jsonData.success) {
+                    alert("Booking successful!");
+                    closePopup();
+                } else {
+                    alert("Booking failed: " + jsonData.error);
+                }
+            } catch (error) {
+                alert("Invalid JSON response. Check console for details.");
+                console.error("Parsing error:", error, "\nResponse received:", data);
+            }
+        })
+        .catch(error => {
+            alert("An error occurred: " + error.message);
+        });
+    });
+
+    function showPopup(trekId, name, image, difficulty, season, pickup_location, price) {
+    let popup = document.getElementById("popupContainer");
+
+    // Set top position based on current scroll position
+    // popup.style.top = `${window.scrollY + 50}px`;
+
+    // Display popup
+    popup.style.display = "flex";
+
+    // Set popup content
+    document.getElementById("trek_id").value = trekId;
+    document.getElementById("popupImage").src = image;
+    document.getElementById("popupTitle").innerText = name;
+    document.getElementById("popupDifficulty").innerText = difficulty;
+    document.getElementById("popupSeason").innerText = season;
+    document.getElementById("popupPickup").innerText = pickup_location;
+    document.getElementById("popupPrice").innerText = price;
+    document.getElementById("popupPrice").setAttribute("data-price", price);
+}
+
+
+
+            function closePopup() {
+                document.getElementById("popupContainer").style.display = "none";
+
+                // Get the form element
+                let form = document.querySelector(".popup-right form");
+
+                // Reset all input fields manually
+                form.querySelectorAll("input").forEach(input => {
+                    if (input.type !== "hidden") {  // Skip CSRF token
+                        input.value = "";
+                    }
+                });
+
+                // Reset total price display
+                document.getElementById("totalPrice").innerText = "0";
+                document.getElementById("priceContainer").style.display = "none";
+            }
+
+
+        function calculatePrice(input) {
+            let people = parseInt(input.value) || 0; // Get number of people
+            let trekPrice = parseFloat(document.getElementById("popupPrice").getAttribute("data-price")) || 0; // Get trek price
+
+            let total = trekPrice * people; // Calculate total price
+
+            if (people > 0) {
+                document.getElementById("totalPrice").innerText = total;
+                document.getElementById("priceContainer").style.display = "block"; // Show the price
+            } else {
+                document.getElementById("priceContainer").style.display = "none"; // Hide if invalid input
+            }
+        }
+
+        function openModal(bookingId) {
+            document.getElementById('modal-' + bookingId).style.display = 'block';
+        }
+        function closeModal(bookingId) {
+            document.getElementById('modal-' + bookingId).style.display = 'none';
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            let today = new Date().toISOString().split("T")[0]; // Get today's date in YYYY-MM-DD format
+            document.getElementById("dateInput").setAttribute("min", today);
+        });
+    </script>
+</body>
+</html>

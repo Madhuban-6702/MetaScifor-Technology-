@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintage Bookstore</title>
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+        body {
+            background-color: #f4e4c1;
+            color: #5a3e2b;
+        }
+        .navbar {
+            background-color: #8b5a2b;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar .logo {
+            color: #fff8dc;
+            font-size: 26px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 20px;
+        }
+        .navbar ul li a {
+            color: #fff8dc;
+            text-decoration: none;
+            font-size: 18px;
+            padding: 10px;
+            background: #5a3e2b;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .navbar ul li a:hover {
+            background: #6b4221;
+        }
+        .search-bar {
+            margin: 20px auto;
+            text-align: center;
+        }
+        .search-bar input {
+            padding: 10px;
+            width: 50%;
+            border: 2px solid #8b5a2b;
+            border-radius: 5px;
+        }
+        .books {
+            text-align: center;
+            padding: 50px 20px;
+            background: rgba(249, 241, 231, 0.9);
+        }
+        .book-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            justify-content: center;
+            padding: 20px;
+        }
+        .book {
+            background: rgba(255, 248, 220, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.3s ease-in-out, background 0.3s ease-in-out;
+            position: relative;
+            overflow: hidden;
+        }
+        .book:hover {
+            transform: scale(1.05);
+            background: rgba(139, 90, 43, 0.9);
+            color: white;
+        }
+        .book img {
+            max-width: 100%;
+            border-radius: 5px;
+            transition: opacity 0.3s;
+        }
+        .book:hover img {
+            opacity: 0.7;
+        }
+        .book h3 {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #5a3e2b;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 15px;
+            background: #8b5a2b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background: #6b4221;
+        }
+        .pagination {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            background: rgba(139, 90, 43, 0.8);
+            border-radius: 10px;
+        }
+        .pagination a {
+            padding: 10px 15px;
+            margin: 5px;
+            background: rgba(255, 248, 220, 0.9);
+            color: #5a3e2b;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .pagination a:hover {
+            background: #6b4221;
+            color: white;
+        }
+        .pagination .current {
+            font-weight: normal;
+            background: none;
+            color: #5a3e2b;
+        }
+            .quantity-selector {
+            display: fl;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            position: center;
+        }
+        .qty-btn {
+            padding: 5px 10px;
+            background: #8b5a2b;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            border-radius: 5px;
+            position: center;
+        }
+        .qty-btn:hover {
+            background: #6b4221;
+            position: center;
+        }
+        .qty-input {
+            width: 50px;
+            text-align: center;
+            border: 2px solid #8b5a2b;
+            border-radius: 5px;
+            font-size: 16px;
+            position: center;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">Vintage Bookstore</a>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="{% url 'cart' %}">Go to Cart</a></li>
+            {% if user.is_authenticated %}
+            <li><a href="{% url 'order_success' %}">Orders</a></li>
+                <li><a href="{% url 'profile' %}">Profile</a></li>
+            {% else %}
+                <li><a href="{% url 'register' %}">Register</a></li>
+                <li><a href="{% url 'login' %}">Login</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <div class="search-bar">
+        <form method="GET" action="">
+            <input type="text" name="q" placeholder="Search for books..." value="{{ request.GET.q }}">
+            <button type="submit" class="btn">Search</button>
+        </form>
+    </div>
+
+    <section class="books">
+        <h2>Featured Books</h2>
+        <div class="book-list">
+            {% for book in books %}
+            <div class="book">
+                <img src="{{ book.imgUrl }}" alt="{{ book.title }}">
+                <h3>{{ book.title }}</h3>
+                <p>Price: ${{ book.price }}</p>
+                <a href="{% url 'book_detail' book.id %}" class="btn">Details</a>
+                
+                <form action="{% url 'add_to_cart' book.id %}" method="post" class="cart-form">
+                    {% csrf_token %}
+                    <div class="quantity-selector">
+                        <button type="button" class="qty-btn decrease">-</button>
+                        <input type="number" name="quantity" value="1" min="1" class="qty-input">
+                        <button type="button" class="qty-btn increase">+</button>
+                    </div>
+                    <button type="submit" class="btn">Add to Cart</button>
+                </form>
+            </div>
+            {% empty %}
+            <p>No books found.</p>
+            {% endfor %}
+        </div>
+        <div class="pagination">
+            {% if books.has_previous %}
+                <a href="?page=1">First</a>
+                <a href="?page={{ books.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span class="current">Page {{ books.number }} of {{ books.paginator.num_pages }}</span>
+
+            {% if books.has_next %}
+                <a href="?page={{ books.next_page_number }}">Next</a>
+                <a href="?page={{ books.paginator.num_pages }}">Last</a>
+            {% endif %}
+        </div>
+    </section>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".cart-form").forEach(function (form) {
+                let decreaseBtn = form.querySelector(".decrease");
+                let increaseBtn = form.querySelector(".increase");
+                let quantityInput = form.querySelector(".qty-input");
+    
+                decreaseBtn.addEventListener("click", function () {
+                    let currentValue = parseInt(quantityInput.value, 10);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+    
+                increaseBtn.addEventListener("click", function () {
+                    let currentValue = parseInt(quantityInput.value, 10);
+                    quantityInput.value = currentValue + 1;
+                });
+            });
+        });
+    </script>    
+</body>
+</html>

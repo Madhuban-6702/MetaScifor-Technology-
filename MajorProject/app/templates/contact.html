@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <title>Contact Us - Sahyadri Trails</title>
+    <style>
+                * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'img/img.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: -10;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            left: 0;
+            transition: background 0.3s ease-in-out;
+            z-index: 100;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        .contact-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            padding: 40px;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 12px;
+            margin: 100px auto 20px;
+            max-width: 800px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(8px);
+        }
+
+        .contact-section h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #a6dcef;
+        }
+
+        .contact-section p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+            font-size: 16px;
+        }
+
+        .footer {
+            width: 100%;
+            min-height: 200px;
+            color: white;
+            padding: 30px 0;
+            text-align: center;
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+            height: 100%;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+            margin: 10px 0;
+            text-align: left;
+        }
+
+        .footer-section h4 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            color: #a6dcef;
+        }
+
+        .footer-section p, .footer-section ul {
+            font-size: 14px;
+            color: #ccc;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-section ul li {
+            margin: 5px 0;
+        }
+
+        .footer-section ul li a {
+            color: #a6dcef;
+            text-decoration: none;
+        }
+
+        .footer-section ul li a:hover {
+            text-decoration: underline;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .social-icons a img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .social-icons a img:hover {
+            transform: scale(1.1);
+        }
+
+        .footer-bottom {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #aaa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 10px;
+            }
+            .navbar a {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .contact-section {
+                padding: 20px;
+                max-width: 90%;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .footer-section {
+                text-align: center;
+            }
+
+            .footer-section h4 {
+                font-size: 18px;
+            }
+
+            .footer-section p, .footer-section ul {
+                font-size: 12px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="overlay"></div>
+
+    <div class="navbar">
+        <div>
+            <a href="{% url 'home' %}" class="home-btn">Sahyadri Trails🏔️</a>
+        </div>
+        <div>
+            <a href="{% url 'explore_treks' %}">Explore</a>
+            <a href="{% url 'bookings_page' %}">Bookings</a>
+            <a href="{% url 'booking_details' %}">View Details</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        </div>
+    </div>
+
+    <div class="contact-section">
+        <h1>Contact Us</h1>
+        <p>We'd love to hear from you!</p>
+        <div class="contact-info">
+            <p><strong>Address:</strong> Sahyadri Trails, Thane, Maharashtra</p>
+            <p><strong>Phone:</strong> +91 89287 34900</p>
+            <p><strong>Email:</strong> contact@sahyadritrails.com</p>
+            <p><strong>Business Hours:</strong> Monday - Friday, 9 AM - 6 PM</p>
+        </div>
+        <p>If you have any questions or need assistance with your bookings, feel free to reach out to us through any of the contact methods listed above.</p>
+        <p>Your adventure starts here!</p>
+    </div>
+
+</body>
+</html>

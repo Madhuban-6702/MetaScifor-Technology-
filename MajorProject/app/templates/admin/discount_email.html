@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Exclusive Trekking Offer - Sahyadri Trails</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 40px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.12);
+            text-align: center;
+        }
+        .logo {
+            max-width: 160px;
+            margin-bottom: 15px;
+        }
+        h2 {
+            color: #065F46;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        p {
+            color: #333;
+            font-size: 16px;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+        .highlight {
+            color: #E67E22;
+            font-weight: bold;
+        }
+        .cta-button {
+            display: inline-block;
+            padding: 14px 28px;
+            margin-top: 20px;
+            background-color: #065F46;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background 0.3s ease-in-out;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+        .cta-button:hover {
+            background-color: #05412F;
+        }
+        .divider {
+            height: 2px;
+            background-color: #EAEAEA;
+            margin: 25px 0;
+        }
+        .footer {
+            font-size: 13px;
+            color: #666;
+            margin-top: 15px;
+        }
+        .footer a {
+            color: #065F46;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .offer-box {
+            background: #F4F4F4;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <img src="https://i.imgur.com/your-logo.png" alt="Sahyadri Trails Logo" class="logo">
+        <h2>🌄 Special Trekking Offer: <span class="highlight">{{ discount.title }}</span></h2>
+        <p><strong>{{ discount.description }}</strong></p>
+
+        <div class="offer-box">
+            <p>💰 Enjoy an exclusive <span class="highlight">{{ discount.percentage }}% OFF</span> on your next adventure!</p>
+            <p>📅 Offer valid from <strong>{{ discount.start_date|date:"F j, Y" }}</strong> to <strong>{{ discount.end_date|date:"F j, Y" }}</strong>.</p>
+        </div>
+
+        <a href="https://madhubansahani02.pythonanywhere.com/bookings/" class="cta-button">Book Your Trek Now</a>
+
+        <div class="divider"></div>
+        <p class="footer">Limited-time offer. Terms and conditions apply.</p>
+        <p class="footer">Need help? <a href="https://madhubansahani02.pythonanywhere.com/contact/">Contact us</a></p>
+    </div>
+</body>
+</html>

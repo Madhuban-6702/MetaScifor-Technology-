@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+
+{% load static %}
+
+{% block branding %}
+    <div id="branding">
+        <!-- Admin Site Header (Left Side) -->
+        <h2>Welcome to the Sahyadri Trails!! Admin</h2>
+
+        <!-- Dashboard Button (Right Side) -->
+        <a href="{% url 'admin_dashboard' %}" class="dashboard-btn">Go to Dashboard</a>
+    </div>
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        /* General Styling */
+        body {
+            background-color: white;
+        }
+        #header {
+            background-color: #005f99;
+            color: white;
+        }
+        #nav-sidebar {
+            background-color: #005f99;
+        }
+        .module h2 {
+            color: #005f99;
+        }
+        .button {
+            background-color: #0078d4;
+            color: white;
+        }
+        .button:hover {
+            background-color: #005f99;
+        }
+
+        /* Branding Section */
+        #branding {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+
+        #branding h2 {
+            font-size: 22px;
+            margin: 0;
+            color: white;
+            flex: 1;
+        }
+
+        .dashboard-btn {
+            background-color: #0078d4;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            white-space: nowrap; /* Prevents text from breaking */
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #branding {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            #branding h2 {
+                font-size: 18px;
+                margin-bottom: 8px;
+            }
+
+            .dashboard-btn {
+                padding: 6px 10px;
+                font-size: 14px;
+            }
+        }
+    </style>
+{% endblock %}

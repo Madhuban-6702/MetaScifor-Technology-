@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>No Orders</title>
+    <style>
+        body {
+            background-color: #f4e4c1;
+            color: #5a3e2b;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            font-size: 24px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #8b5a2b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #6b4221;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>You have not placed any orders yet!</h2>
+        <p>We encourage you to browse our products and place your first order.</p>
+        <a href="{% url 'home' %}" class="btn">Return to Home</a>
+    </div>
+</body>
+</html>

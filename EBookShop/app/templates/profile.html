@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4e4c1;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 500px;
+            width: 90%;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            margin-top: 80px;
+        }
+        h2 {
+            color: #5a3e2b;
+            margin-bottom: 20px;
+        }
+        .profile-info {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .profile-info p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .btn {
+            width: auto;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+            text-align: center;
+            display: inline-block;
+            text-decoration: none;
+            color: white;
+            margin: 5px;
+        }
+        .edit-button { background: #8b5a2b; }
+        .edit-button:hover { background: #6b4221; }
+        .logout-button { background: #d9534f; }
+        .logout-button:hover { background: #c9302c; }
+        .save-button { background: #4CAF50; }
+        .save-button:hover { background: #388E3C; }
+        .edit-profile-form {
+            display: none;
+            text-align: left;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            font-size: 14px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .navbar {
+            background-color: #8b5a2b;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            width: 98%;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .navbar .logo {
+            color: #fff8dc;
+            font-size: 20px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .navbar ul {
+            list-style: none;
+            display: flex;
+            gap: 10px;
+            padding: 0;
+            margin: 0;
+        }
+        .navbar ul li {
+            display: inline;
+        }
+        .navbar ul li a {
+            color: #fff8dc;
+            text-decoration: none;
+            font-size: 16px;
+            padding: 8px 12px;
+            background: #5a3e2b;
+            border-radius: 5px;
+            transition: 0.3s;
+            display: block;
+        }
+        .navbar ul li a:hover { background: #6b4221; }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 10px;
+            }
+            .navbar ul {
+                flex-direction: column;
+                width: 100%;
+                text-align: center;
+            }
+            .navbar ul li {
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="logo">Vintage Bookstore</a>
+        <ul>
+            <li><a href="{% url 'home' %}">Home</a></li>
+            <li><a href="{% url 'cart' %}">Go to Cart</a></li>
+        </ul>
+    </nav>
+    <div class="container">
+        <h2>User Profile</h2>
+        <div class="profile-info">
+            <p><strong>Username:</strong> {{ user.username }}</p>
+            <p><strong>Full Name:</strong> {{ user.full_name }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Phone:</strong> {{ user.phone }}</p>
+            <p><strong>Address:</strong> {{ user.address }}</p>
+        </div>
+
+        <button class="btn edit-button" id="editBtn" onclick="toggleEditForm()">Edit Profile</button>
+
+        <div class="edit-profile-form" id="editProfileForm">
+            <form method="POST" action="{% url 'edit_profile' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" value="{{ user.username }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="full_name">Full Name:</label>
+                    <input type="text" id="full_name" name="full_name" value="{{ user.full_name }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" value="{{ user.phone }}" required pattern="[0-9]{10}">
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" value="{{ user.address }}" required>
+                </div>
+
+                <button type="submit" class="btn save-button">Save Changes</button>
+            </form>
+        </div>
+
+        <a href="{% url 'logout' %}" class="btn logout-button">Logout</a>
+    </div>
+
+    <script>
+        function toggleEditForm() {
+            var form = document.getElementById('editProfileForm');
+            var editButton = document.getElementById('editBtn');
+
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+                editButton.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

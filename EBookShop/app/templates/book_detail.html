@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Details</title>
+    {% load static %}
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+        body {
+            background-color: #f4e4c1;
+            color: #5a3e2b;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        .container {
+            display: flex;
+            gap: 40px;
+            padding: 50px;
+            max-width: 900px;
+            margin: 50px auto;
+            background: rgba(255, 248, 220, 0.9);
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .book-poster {
+            flex: 1;
+            text-align: center;
+        }
+        .book-poster img {
+            max-width: 100%;
+            border-radius: 10px;
+        }
+        .book-title {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .action-buttons {
+            margin-top: 15px;
+        }
+        .action-buttons a {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background: #8b5a2b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .action-buttons a:hover {
+            background: #6b4221;
+        }
+        .book-details {
+            flex: 2;
+        }
+        .book-details p {
+            margin-bottom: 10px;
+            font-size: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+    <div class="container">
+        <!-- Left Section -->
+        <div class="book-poster">
+            <img src="{{ book.imgUrl }}" alt="Cover of {{ book.title }}">
+            <div class="book-title">{{ book.title }}</div>
+            <div class="action-buttons">
+                <a href="{% url 'add_to_cart' book.id %}">Add to Cart</a>
+                <a href="{% url 'home' %}">Back to Store</a>
+            </div>
+        </div>
+
+        <!-- Right Section -->
+        <div class="book-details">
+            <p><strong>Title:</strong> {{ book.title }}</p>
+            <p><strong>Category:</strong> {{ book.category_name }}</p>
+            <p><strong>Price:</strong> ${{ book.price }}</p>
+            <p><strong>Rating:</strong> {{ book.stars }} ⭐</p>
+            <p><strong>Reviews:</strong> {{ book.reviews }}</p>
+        </div>
+    </div>
+</body>
+</html>

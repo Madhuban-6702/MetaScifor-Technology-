@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sahyadri Trails - Plan Your Trip</title>
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+                * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'img/img.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            transition: background 0.3s ease-in-out;
+            z-index: 100;
+        }
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+        .hero {
+            margin-top: 120px;
+            padding: 80px 20px;
+        }
+        .hero h1 {
+            font-size: 3em;
+            color: #a6dcef;
+            text-shadow: 2px 2px 10px rgba(255, 255, 255, 0.5);
+        }
+        .hero p {
+            font-size: 1.4em;
+            margin: 10px 0 20px;
+        }
+        .btn {
+            background-color: transparent;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid white;
+            display: inline-block;
+        }
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: 0px 4px 10px rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        .features, .testimonials {
+            background: rgba(97, 95, 95, 0.397);
+            margin: 50px auto;
+            padding: 40px;
+            border-radius: 12px;
+            max-width: 1000px;
+        }
+        .features h2, .testimonials h2 {
+            color: #a6dcef;
+            font-size: 2em;
+        }
+        .feature-grid {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .feature-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            width: 250px;
+            text-align: center;
+        }
+        .footer {
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            font-size: 14px;
+        }
+
+        /* Chatbot Button */
+.chatbot-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #ff6b6b, #ffb86c);
+    color: white;
+    border: none;
+    padding: 14px 18px;
+    font-size: 18px;
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s ease;
+}
+
+.chatbot-btn:hover {
+    background: linear-gradient(135deg, #ff4757, #ffa502);
+    transform: scale(1.05);
+}
+
+/* Chatbox */
+.chatbox {
+    display: none;
+    flex-direction: column;
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    width: 350px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    border: 1px solid #ccc;
+}
+
+/* Chatbox Header */
+.chatbox-header {
+    background: linear-gradient(135deg, #00c9ff, #b471ff);
+    color: white;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.close-chat {
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    transition: 0.3s;
+}
+
+.close-chat:hover {
+    color: #ff4757;
+}
+
+/* Chatbox Body */
+.chatbox-body {
+    max-height: 300px;
+    overflow-y: auto;
+    padding: 12px;
+    font-size: 15px;
+    display: flex;
+    flex-direction: column;
+    background: #f9f9f9;
+}
+
+/* Chatbox Footer */
+.chatbox-footer {
+    display: flex;
+    border-top: 2px solid #ccc;
+    padding: 8px;
+    background: #fff;
+}
+
+.chatbox-footer input {
+    flex: 1;
+    padding: 8px;
+    border: none;
+    outline: none;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #f1f1f1;
+}
+
+.chatbox-footer button {
+    background: linear-gradient(135deg, #ff6b6b, #ffb86c);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    margin-left: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+.chatbox-footer button:hover {
+    background: linear-gradient(135deg, #ff4757, #ffa502);
+    transform: scale(1.05);
+}
+
+/* Styling Messages */
+.bot-msg {
+    background: linear-gradient(135deg, #007bff, #00c9ff);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    max-width: 80%;
+    font-weight: bold;
+}
+
+.user-msg {
+    background: linear-gradient(135deg, #ff6b6b, #ffb86c);
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    align-self: flex-end;
+    margin-bottom: 5px;
+    max-width: 80%;
+    text-align: right;
+    font-weight: bold;
+}
+
+/* Typing Indicator */
+.typing {
+    display: inline-block;
+    font-size: 14px;
+    color: gray;
+    margin-bottom: 5px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+}
+
+.vlogs {
+    padding: 50px 20px;
+    background: rgba(97, 95, 95, 0.397);
+    border-radius: 12px;
+    margin: 50px auto;
+    max-width: 1000px;
+    text-align: center;
+    color: white;
+}
+
+.vlogs h2 {
+    font-size: 2em;
+    color: #a6dcef;
+    margin-bottom: 20px;
+}
+
+.vlog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.vlog-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.3s ease-in-out;
+}
+
+.vlog-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-5px);
+}
+
+.vlog-item h3 {
+    font-size: 18px;
+    color: #a6dcef;
+    margin-bottom: 10px;
+}
+
+.vlog-item p {
+    font-size: 14px;
+    color: #ddd;
+}
+
+.vlog-item a {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 16px;
+    background: #a6dcef;
+    color: black;
+    font-weight: bold;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background 0.3s ease-in-out;
+}
+
+.vlog-item a:hover {
+    background: #82c8e6;
+}
+.view-more-container {
+        text-align: center;
+        margin-top: 20px;
+    }
+
+    .view-more-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        border: 2px solid white; /* Red border */
+        color: White; /* Red text */
+        background-color: transparent; /* Transparent background */
+        text-decoration: none;
+        border-radius: 5px;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+
+    .view-more-btn:hover {
+        background-color: rgba(255, 255, 255, 0.3); /* Red on hover */
+        color: white; /* White text on hover */
+    }
+
+
+
+        /* Mobile Responsiveness */
+        @media (max-width: 1024px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+            .hero p {
+                font-size: 1.2em;
+            }
+        }
+        @media (max-width: 768px) {
+            .feature-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 10px;
+            }
+            .navbar a {
+                padding: 10px;
+                font-size: 16px;
+            }
+            .hero {
+                margin-top: 100px;
+                padding: 50px 15px;
+            }
+            .hero h1 {
+                font-size: 2em;
+            }
+            .hero p {
+                font-size: 1em;
+            }
+            .btn {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+            .features, .testimonials {
+                padding: 30px;
+            }
+            .vlogs {
+        padding: 30px;
+    }
+
+    .vlog-item {
+        padding: 15px;
+    }
+
+    .vlog-item h3 {
+        font-size: 16px;
+    }
+
+    .vlog-item p {
+        font-size: 13px;
+    }
+    .vlog-grid {
+            flex-direction: column;
+            align-items: center;
+        }
+        }
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.8em;
+            }
+            .hero p {
+                font-size: 0.9em;
+            }
+            .btn {
+                padding: 8px 18px;
+                font-size: 14px;
+            }
+            .navbar {
+                padding: 8px;
+            }
+            .navbar a {
+                font-size: 14px;
+                padding: 8px;
+            }
+            .features, .testimonials {
+                padding: 20px;
+            }
+            .feature-item {
+                width: 90%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <!-- Navbar -->
+    <div class="navbar">
+        <div>
+            <a href="{% url 'home' %}" class="home-btn">Sahyadri Trails🏔️</a>
+        </div>
+        <div>
+            <a href="{% url 'explore_treks' %}">Explore</a>
+            <a href="{% url 'bookings_page' %}">Bookings</a>
+            <a href="{% url 'booking_details' %}">View Details</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <h1>Plan Your Dream Trip with Sahyadri Trails</h1>
+        <p>Discover, plan, and book your next adventure with ease.</p>
+        <a href="{% url 'explore_treks' %}" class="btn">Get Started</a>
+    </div>
+
+    <div class="vlogs">
+        <h2>📹 Vlogs & Stories</h2>
+        <p>Watch amazing travel vlogs and read about the history of the Sahyadri ranges and Chhatrapati Shivaji Maharaj's forts.</p>
+    
+        <div class="vlog-grid">
+            <div class="vlog-item">
+                <iframe width="100%" height="200" 
+                    src="https://www.youtube.com/embed/6LWlSBcV2nE" 
+                    title="Rajgad Fort Trek" 
+                    frameborder="0" allowfullscreen>
+                </iframe>
+                <h3>Rajgad Fort - The Capital of Swarajya</h3>
+                <p>Explore the history of Rajgad Fort, once the capital of Chhatrapati Shivaji Maharaj.</p>
+            </div>
+            <div class="vlog-item">
+                <iframe width="100%" height="200" 
+                    src="https://www.youtube.com/embed/cp6sLIwog-I" 
+                    title="Harishchandragad Trek" 
+                    frameborder="0" allowfullscreen>
+                </iframe>
+                <h3>Harishchandragad - A Trekker’s Paradise</h3>
+                <p>Experience the thrilling trek to Harishchandragad and witness the mesmerizing Konkan Kada.</p>
+            </div>
+            <div class="vlog-item">
+                <iframe width="100%" height="200" 
+                    src="https://www.youtube.com/embed/jNPyn9A0EHo" 
+                    title="Raigad Fort Tour" 
+                    frameborder="0" allowfullscreen>
+                </iframe>
+                <h3>Raigad Fort - The Royal Capital</h3>
+                <p>Learn about the glorious past of Raigad Fort, the coronation place of Chhatrapati Shivaji Maharaj.</p>
+            </div>
+        </div>
+        <div class="view-more-container">
+            <a href="https://www.youtube.com/" target="_blank" class="view-more-btn">🎥 View More</a>
+        </div>
+    </div>
+    
+
+    <!-- Why Choose Us -->
+    <div class="features">
+        <h2>Why Choose Us?</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>🏔️ Beautiful Treks</h3>
+                <p>Explore the breathtaking Sahyadri ranges.</p>
+            </div>
+            <div class="feature-item">
+                <h3>💰 Affordable Prices</h3>
+                <p>Budget-friendly trekking packages.</p>
+            </div>
+            <div class="feature-item">
+                <h3>📍 Expert Guides</h3>
+                <p>Experienced guides ensure your safety.</p>
+            </div>
+        </div>
+    </div>
+
+    <button class="chatbot-btn" onclick="toggleChat()">💬 Chat</button>
+
+    <div class="chatbox" id="chatbox">
+        <div class="chatbox-header">
+            Travel Bot
+            <span class="close-chat" onclick="toggleChat()">✖</span>
+        </div>
+        <div class="chatbox-body" id="chatbox-body"></div>
+        <div class="chatbox-footer">
+            <input type="text" id="user-input" placeholder="Type a message..." onkeypress="if(event.key === 'Enter') sendMessage()">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleChat() {
+            var chatbox = document.getElementById("chatbox");
+            var chatBody = document.getElementById("chatbox-body");
+    
+            if (chatbox.style.display === "none" || chatbox.style.display === "") {
+                chatbox.style.display = "flex";
+                chatBody.innerHTML = ""; // Clear previous messages
+    
+                setTimeout(() => {
+                    chatBody.innerHTML += `<p class="bot-msg"><strong></strong> Hey traveler! Ready to explore Maharashtra's best Trek Places? Tell me where you want to go, and I'll help you plan an unforgettable trip! 🚀</p>`;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }, 1000);
+            } else {
+                chatbox.style.display = "none";
+            }
+        }
+
+        const trekDetails = {
+            "Andharban Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "₹1400", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast and Lunch", image: "img/andharban.jpg", description: "A dense forest trek filled with waterfalls, streams, and stunning valley views."},
+            "Anjaneri Trek": {difficulty: "Easy", season: "Winter", duration: "One-Day", cost: "₹900", start: "Nashik", end: "Nashik", meals: "Breakfast", image: "img/anjaneri.jpg", description: "A religious trek believed to be the birthplace of Lord Hanuman, with scenic views."},
+            "Avchitgad Fort Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "₹1400", start: "Roha, Maharashtra", end: "Roha, Maharashtra", meals: "Breakfast, Lunch", image: "img/avchitgad.jpg", description: "A thrilling fort trek with lush greenery, waterfalls, and panoramic views."},
+            "Bhimashankar Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "₹1400", start: "Karjat Railway Station", end: "Karjat Railway Station", meals: "Breakfast, Lunch", image: "img/bhimashankar.jpg", description: "A scenic jungle trek leading to an ancient temple of Lord Shiva."},
+            "Dukes Nose Trek": {difficulty: "Easy", season: "Monsoon", duration: "-", cost: "₹800", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast", image: "img/dukes_nose.jpg", description: "A short hike to a stunning viewpoint offering panoramic valley views."},
+            "Garbett Plateau Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "₹1300", start: "Neral Railway Station", end: "Neral Railway Station", meals: "Breakfast, Lunch", image: "img/garbett.jpg", description: "A picturesque trek near Matheran, known for its lush greenery and scenic plateau."},
+            "Gorakhgad Trek": {difficulty: "Hard", season: "Winter", duration: "One-Day", cost: "₹1500", start: "Kalyan Railway Station", end: "Kalyan Railway Station", meals: "Breakfast, Lunch", image: "img/gorakhgad.jpg", description: "A steep and adventurous trek with caves and breathtaking summit views."},
+            "Harihar Fort Trek": {difficulty: "Hard", season: "Winter", duration: "Weekend", cost: "₹2000", start: "Kasara Railway Station", end: "Kasara Railway Station", meals: "Breakfast, Lunch, Dinner", image: "img/harihar.jpg", description: "An adventurous trek with a steep rock-cut staircase leading to a breathtaking summit."},
+            "Harishchandragad Trek": {difficulty: "Hard", season: "Winter", duration: "Weekend", cost: "₹2500", start: "Kalyan Railway Station", end: "Kalyan Railway Station", meals: "All meals included", image: "img/harishchandragad.jpg", description: "A challenging trek with breathtaking views from the Konkan Kada cliff."},
+            "Jivdhan Fort Trek": {difficulty: "Hard", season: "Winter", duration: "One-Day", cost: "₹1600", start: "Pune", end: "Pune", meals: "Breakfast, Lunch", image: "img/jivdhan.jpg", description: "A historical fort trek with rock patches and adventure-filled climbs."},
+            "Kalavantin Durg Trek": {difficulty: "Hard", season: "Monsoon", duration: "One-Day", cost: "₹1800", start: "Panvel Railway Station", end: "Panvel Railway Station", meals: "Breakfast, Lunch", image: "img/kalavantin.jpg", description: "An adventurous trek featuring steep rock-cut steps leading to a breathtaking summit."},
+            "Kalsubai Peak": {difficulty: "Hard", season: "Monsoon", duration: "One-Day", cost: "₹1800", start: "Kasara Railway Station", end: "Kasara Railway Station", meals: "Breakfast and Evening Snacks", image: "img/kalsubai.jpg", description: "The highest peak of Maharashtra, offering mesmerizing sunrise views."},
+            "Karnala Fort Trek": {difficulty: "Easy", season: "Monsoon", duration: "-", cost: "₹900", start: "Panvel Railway Station", end: "Panvel Railway Station", meals: "Breakfast", image: "img/karnala.jpg", description: "A short trek through a bird sanctuary leading to an ancient hill fort."},
+            "Korigad Trek": {difficulty: "Easy", season: "Monsoon", duration: "One-Day", cost: "₹900", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast, Lunch", image: "img/korigad.jpg", description: "A beautiful fort trek near Lonavala, offering stunning views of Amby Valley."},
+            "Kunjargad Trek": {difficulty: "Moderate", season: "Winter", duration: "One-Day", cost: "₹1200", start: "Ahmednagar", end: "Ahmednagar", meals: "Breakfast, Lunch", image: "img/kunjargad.jpg", description: "A lesser-known fort trek offering caves, water reservoirs, and stunning landscapes."},
+            "Lingana Fort Trek": {difficulty: "Hard", season: "Winter", duration: "-", cost: "2800.00", start: "Pune", end: "Pune", meals: "Breakfast, Lunch, Dinner", image: "img/lingana.jpg", description: "A challenging rock-climbing trek to one of the toughest forts in Maharashtra."},
+            "Lohagad Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "1000.00", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast and Tea included", image: "img/lohagad.jpg", description: "A trek to Lohagad Fort, known for its strong fortifications and scenic views."},
+            "Mahuli Fort Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "1300.00", start: "Asangaon Railway Station", end: "Asangaon Railway Station", meals: "Breakfast, Lunch", image: "img/mahuli.jpg", description: "A jungle trek with rock patches and a beautiful fort surrounded by misty clouds."},
+            "Peb Fort Trek (Vikatgad)": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "1100.00", start: "Neral Railway Station", end: "Neral Railway Station", meals: "Breakfast, Lunch", image: "img/peb.jpg", description: "A fun trek near Matheran with caves, waterfalls, and a railway track walk."},
+            "Prabalgad Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "1200.00", start: "Panvel Railway Station", end: "Panvel Railway Station", meals: "Breakfast and Snacks included", image: "img/prabalgad.jpg", description: "A trek to a scenic plateau with panoramic views of the Western Ghats."},
+            "Raireshwar Trek": {difficulty: "Easy", season: "Monsoon", duration: "One-Day", cost: "1000.00", start: "Bhor, Maharashtra", end: "Bhor, Maharashtra", meals: "Breakfast, Lunch", image: "img/raireshwar.jpg", description: "A scenic trek leading to a historic temple associated with Chhatrapati Shivaji Maharaj."},
+            "Rajgad Trek": {difficulty: "Moderate", season: "Winter", duration: "Weekend", cost: "1500.00", start: "Swargate Bus Stand, Pune", end: "Swargate Bus Stand, Pune", meals: "Breakfast, Lunch, and Dinner included", image: "img/rajgad.jpg", description: "A trek to one of the most important forts of the Maratha Empire, known for its historical significance."},
+            "Rajmachi Trek": {difficulty: "Moderate", season: "Monsoon", duration: "Weekend", cost: "1200.00", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast and Lunch included", image: "img/rajmachi.jpg", description: "A scenic trek through lush green trails leading to the historic Rajmachi Fort."},
+            "Ratangad Trek": {difficulty: "Moderate", season: "Monsoon", duration: "Weekend", cost: "1700.00", start: "Kasara Railway Station", end: "Kasara Railway Station", meals: "Breakfast, Lunch, Dinner", image: "img/ratangad.jpg", description: "A historic fort trek with amazing rock-cut caves and views of Bhandardara Lake."},
+            "Sandhan Valley Trek": {difficulty: "Hard", season: "Winter", duration: "Weekend", cost: "2800.00", start: "Kasara Railway Station", end: "Kasara Railway Station", meals: "All meals included", image: "img/sandhan_valley.jpg", description: "A unique canyon trek involving rappelling, rock patches, and river crossing."},
+            "Sinhagad Trek": {difficulty: "Easy", season: "Winter", duration: "One-Day", cost: "800.00", start: "Pune Railway Station", end: "Pune Railway Station", meals: "Breakfast included", image: "img/sinhagad.jpg", description: "A short and easy trek leading to a historic fort near Pune."},
+            "Sudhagad Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "1100.00", start: "Pali, Maharashtra", end: "Pali, Maharashtra", meals: "Breakfast, Lunch", image: "img/sudhagad.jpg", description: "A scenic trek to an ancient fort with rich Maratha history and beautiful landscapes."},
+            "Tikona Fort Trek": {difficulty: "Easy", season: "Monsoon", duration: "One-Day", cost: "1000.00", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast, Lunch", image: "img/tikona.jpg", description: "A beginner-friendly trek with scenic landscapes and a triangular-shaped fort."},
+            "Torana Trek": {difficulty: "Hard", season: "Winter", duration: "Weekend", cost: "2000.00", start: "Shivajinagar Railway Station", end: "Shivajinagar Railway Station", meals: "All meals included", image: "img/torana.jpg", description: "A challenging trek to the highest fort in Pune district, offering breathtaking views."},
+            "Visapur Fort Trek": {difficulty: "Moderate", season: "Monsoon", duration: "One-Day", cost: "1000.00", start: "Lonavala Railway Station", end: "Lonavala Railway Station", meals: "Breakfast, Lunch", image: "img/visapur.jpg", description: "A thrilling monsoon trek offering waterfalls and mesmerizing valley views."}
+        };
+
+    
+        function sendMessage() {
+    let userMessage = document.getElementById("user-input").value.trim();
+    let chatBody = document.getElementById("chatbox-body");
+
+    if (userMessage === "") return; // Prevent empty messages
+
+    // Display user message
+    chatBody.innerHTML += `<p class="user-msg"><strong></strong> ${userMessage}</p>`;
+
+    // Typing indicator
+    let typingIndicator = document.createElement("p");
+    typingIndicator.className = "typing";
+    typingIndicator.innerHTML = "Bot is typing...";
+    chatBody.appendChild(typingIndicator);
+    chatBody.scrollTop = chatBody.scrollHeight;
+
+    let botReply = "";
+
+    setTimeout(() => {
+        chatBody.removeChild(typingIndicator); // Remove typing indicator
+
+        if (/hi|hello|hey/i.test(userMessage)) {
+            botReply = "Hello! Looking for the best treks in Maharashtra? Let me know your budget, and I'll suggest the best options! 🚀";
+        } else if (/budget|suggest|recommend|yes/i.test(userMessage)) {
+            botReply = "Maharashtra has options for every wallet size! <br> \
+            🔹 <strong>Under ₹1K:</strong> Dukes Nose Trek, Karnala Fort Trek, Anjaneri Trek, Sinhagad Trek <br> \
+            🔹 <strong>₹1K - ₹1.5K:</strong> Lohagad Trek, Tikona Fort Trek, Rajmachi Trek, Mahuli Fort Trek, Garbett Plateau Trek, Gorakhgad Trek <br> \
+            🔹 <strong>₹2K+:</strong> Harihar Fort Trek, Torana Trek, Sandhan Valley Trek, Lingana Fort Trek <br> \
+            Which budget fits yours?";
+        } else if (/1K/i.test(userMessage)) {
+            botReply = "Great! Here are your budget-friendly treks: Dukes Nose Trek, Karnala Fort Trek, Anjaneri Trek, and Sinhagad Trek. Let me know which one excites you!";
+        } else if (/1\.5K|1K-1\.5K/i.test(userMessage)) {
+            botReply = "Awesome! You can explore Lohagad Trek, Tikona Fort Trek, Rajmachi Trek, Mahuli Fort Trek, Garbett Plateau Trek, or Gorakhgad Trek. Which trek interests you?";
+        } else if (/2K/i.test(userMessage)) {
+            botReply = "Superb choice! Consider Harihar Fort Trek, Torana Trek, Sandhan Valley Trek, or Lingana Fort Trek. Which one would you like to explore?";
+        } 
+        // **Check if User Input Matches a Trek Name**
+        else if (trekDetails[userMessage]) {
+            let trek = trekDetails[userMessage];
+            botReply = `<strong>${userMessage}</strong> Details:<br>
+                🔹 <strong>Difficulty:</strong> ${trek.difficulty} <br>
+                🔹 <strong>Best Season:</strong> ${trek.season} <br>
+                🔹 <strong>Duration:</strong> ${trek.duration} <br>
+                🔹 <strong>Cost:</strong> ${trek.cost} <br>
+                🔹 <strong>Reach at Pickup location till 6:30 AM:</strong> ${trek.start} <br>
+                🔹 <strong>We will drop you return at:</strong> ${trek.end} <br>
+                🔹 <strong>Meals Provided at the base village:</strong> ${trek.meals} <br>
+                📝 <strong>Description:</strong> ${trek.description}`;
+        } else if (/details|more|tell/i.test(userMessage)) {
+            botReply = `🔗 <a href="{% url 'bookings_page' %}">📅 Bookings</a>`;
+        }  
+        else if (/view details|info/i.test(userMessage)) {
+            botReply = `ℹ️ <a href="{% url 'booking_details' %}">View Details</a>`;
+        }  
+        else if (/contact|support/i.test(userMessage)) {
+            botReply = `📞 <a href="{% url 'contact' %}">Contact Us</a>`;
+        }
+        else {
+            botReply = "I'm here to help! Would you like travel suggestions based on your budget? 🚀";
+        }
+
+        chatBody.innerHTML += `<p class="bot-msg"><strong></strong> ${botReply}</p>`;
+        chatBody.scrollTop = chatBody.scrollHeight;
+    }, 1000);
+
+    document.getElementById("user-input").value = "";
+}
+    </script>
+  
+    </body>
+</html>
+
+

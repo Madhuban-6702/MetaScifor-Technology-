@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', serif;
+        }
+        body {
+            background-color: #f4e4c1;
+            color: #5a3e2b;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        table, th, td {
+            border: 1px solid #8b5a2b;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        th {
+            background-color: #8b5a2b;
+            color: white;
+        }
+        .total-row {
+            font-weight: bold;
+            background: #f0dab5;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #8b5a2b;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .btn:hover {
+            background: #6b4221;
+        }
+        .empty-cart {
+            font-size: 18px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .order-summary {
+            background: #f7e0b6;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+            margin-top: 20px;
+        }
+        .order-summary p {
+            font-size: 16px;
+            margin: 5px 0;
+        }
+        .back-link {
+            display: block;
+            margin-top: 15px;
+            text-decoration: none;
+            color: #8b5a2b;
+            font-weight: bold;
+            font-size: 16px;
+        }
+        .back-link:hover {
+            color: #6b4221;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Checkout</h2>
+
+        {% if cart %}
+            <table>
+                <tr>
+                    <th>Book</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                </tr>
+                {% for book_id, item in cart.items %}
+                <tr>
+                    <td>{{ item.title }}</td>
+                    <td>${{ item.price }}</td>
+                    <td>{{ item.quantity }}</td>
+                    <td>${{ item.price|floatformat:2 }}</td>
+                </tr>
+                
+                <tr class="total-row">
+                    <td colspan="3">Subtotal</td>
+                    <td><strong>${{ item.total_price|floatformat:2 }}</strong></td>
+                </tr>
+                {% endfor %}
+            </table>
+
+            <div class="order-summary">
+                <p><strong>User:</strong> {{ user.username }}</p>
+                <p><strong>Phone Number:</strong> {{ user.phone }}</p>
+                <p><strong>Address:</strong> {{ user.address  }}</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn">Place Order</button>
+            </form>
+        {% else %}
+            <p class="empty-cart">Your cart is empty.</p>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="back-link">Back to Home</a>
+    </div>
+</body>
+</html>

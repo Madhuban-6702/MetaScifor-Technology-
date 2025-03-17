@@ -1,0 +1,361 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore Treks</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'img/img.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(3px);
+            z-index: -1;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        h1 {
+            margin-top: 100px;
+            font-size: 2.5em;
+            text-align: center;
+        }
+
+        .trek-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            justify-content: center;
+            padding: 50px 20px;
+        }
+
+        .trek-card {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+
+        .trek-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+
+        .testimonials {
+            margin-top: 50px;
+            text-align: center;
+        }
+
+        .testimonials h2 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .testimonial {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            margin: 10px auto;
+            width: 60%;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .testimonial img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            margin-right: 15px;
+            object-fit: cover;
+        }
+
+        .testimonial-content {
+            text-align: left;
+            color: white;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .testimonial-content p {
+            font-size: 1em;
+            margin-bottom: 5px;
+        }
+
+        .rating {
+            font-size: 1.2em;
+            color: gold;
+            margin: 5px 0;
+        }
+
+        .author {
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 1024px) {
+            .trek-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .testimonial {
+                width: 80%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            /* Remove blur from odd-numbered trek cards */
+            .trek-container {
+                grid-template-columns: 1fr;
+                gap: 15px;
+                padding: 30px 10px;
+            }
+
+            /* Remove blur from odd-numbered trek cards */
+            .trek-card:nth-child(odd) {
+                backdrop-filter: none;
+                background: rgba(255, 255, 255, 0.2); /* Slightly visible */
+            }
+
+            /* Keep even-numbered trek cards blurred */
+            .trek-card:nth-child(even) {
+                backdrop-filter: blur(5px);
+                background: rgba(255, 255, 255, 0.1);
+            }
+
+            .trek-card {
+                padding: 15px;
+                text-align: center;
+            }
+
+            .trek-card img {
+                height: 200px;
+            }
+
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 10px;
+            }
+            .navbar a {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .trek-container {
+                grid-template-columns: repeat(1, 1fr);
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .testimonial {
+                flex-direction: column;
+                text-align: center;
+                width: 90%;
+            }
+
+            .testimonial img {
+                margin-bottom: 10px;
+                margin-right: 0;
+            }
+        }
+
+        /* Centering the form */
+            .search-form {
+                display: flex;
+                justify-content: center;
+                margin-bottom: 20px;
+                flex-wrap: wrap;
+            }
+
+            input[type="text"] {
+                width: 50%;
+                padding: 12px;
+                border: 2px solid #ccc;
+                border-radius: 5px;
+                font-size: 16px;
+            }
+
+            button {
+                padding: 12px 20px;
+                border: none;
+                background-color: transparent;
+                border: 2px solid white;
+                border-radius: 5px;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-left: 10px;
+            }        
+            button:hover {
+                background-color: rgba(255, 255, 255, 0.3);;
+            }
+            
+            @media (max-width: 768px) {
+        input[type="text"] {
+            width: 80%;
+        }
+
+        .search-form {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        button {
+            width: 50%;
+            margin-top: 10px;
+            margin-left: 0;
+        }
+
+        .trek-card {
+            width: 100%;
+            max-width: 400px;
+        }
+    }
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            .trek-card {
+                padding: 15px;
+            }
+
+            .testimonial {
+                width: 95%;
+            }
+        }
+    </style>
+
+</head>
+<body>
+    <div class="overlay"></div>
+
+    <div class="navbar">
+        <div>
+            <a href="{% url 'home' %}" class="home-btn">Sahyadri Trails🏔️</a>
+        </div>
+        <div>
+            <a href="{% url 'explore_treks' %}">Explore</a>
+            <a href="{% url 'bookings_page' %}">Bookings</a>
+            <a href="{% url 'booking_details' %}">View Details</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        </div>
+    </div>
+
+    <h1>Explore Treks</h1>
+    <form method="GET" action="{% url 'explore_treks' %}">
+        <input type="text" name="q" placeholder="Search for treks..." value="{{ request.GET.q }}">
+        <button type="submit">Search</button>
+    </form>
+    <div class="trek-container">
+        {% for trek in treks|slice:":6" %}
+            <div class="trek-card">
+                <img src="{{ trek.image.url }}" alt="{{ trek.name }}">
+                <h2>{{ trek.name }}</h2>
+                <p><strong>Difficulty:</strong> {{ trek.difficulty }}</p>
+                <p><strong>Season:</strong> {{ trek.season }}</p>
+                <p><strong>Duration:</strong> {{ trek.duration }}</p>
+                <p><strong>Price:</strong> ₹{{ trek.price }} per person</p>
+                <p><strong>Pickup Location:</strong> {{ trek.pickup_location }}</p>
+                <p><strong>Drop Location:</strong> {{ trek.drop_location }}</p>
+                <p><strong>Meals Included:</strong> {{ trek.meals }}</p>
+                <p><strong>Description:</strong> {{ trek.description }}</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Testimonials Section -->
+    <div class="testimonials">
+        <h2>What Our Travelers Say</h2>
+
+        <div class="testimonial">
+            <img src="{% static 'img/user1.jpg' %}" alt="User 1">
+            <div class="testimonial-content">
+                <p>"The trek experience was incredible! The scenery was breathtaking, and the trails were well-marked."</p>
+                <div class="rating">★★★★★</div>
+                <span class="author">- Ramesh K.</span>
+            </div>
+        </div>
+
+        <div class="testimonial">
+            <img src="{% static 'img/user2.jpg' %}" alt="User 2">
+            <div class="testimonial-content">
+                <p>"A fantastic adventure! Everything was well organized, and I felt safe throughout the journey."</p>
+                <div class="rating">★★★★☆</div>
+                <span class="author">- Suresh D.</span>
+            </div>
+        </div>
+
+        <div class="testimonial">
+            <img src="{% static 'img/user3.jpg' %}" alt="User 3">
+            <div class="testimonial-content">
+                <p>"This was my first trek, and it was unforgettable. I will definitely be coming back for more!"</p>
+                <div class="rating">★★★★★</div>
+                <span class="author">- Sita Kumari .A</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

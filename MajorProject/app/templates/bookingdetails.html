@@ -1,0 +1,291 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Bookings</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: url("{% static 'img/img.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 14px 20px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .navbar a:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(5px);
+            z-index: -1;
+        }
+
+        .container {
+            padding-top: 100px;
+            width: 80%;
+            margin: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .booking-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            width: 100%;
+            text-align: center;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .download-btn {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            text-align: left;
+            color: black;
+            backdrop-filter: blur(20px);
+        }
+
+        .close {
+            float: right;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                text-align: center;
+                padding: 10px;
+            }
+            .navbar a {
+                padding: 10px;
+                font-size: 16px;
+            }
+
+            .container {
+                width: 90%;
+                padding-top: 140px;
+            }
+
+            .booking-card {
+                backdrop-filter: none; /* Remove blur on smaller screens */
+                background: rgba(255, 255, 255, 0.3); /* Slightly more contrast */
+            }
+            
+        }
+
+        @media (max-width: 480px) {
+            h2 {
+                font-size: 2rem;
+            }
+
+            .btn {
+                font-size: 14px;
+                padding: 10px 15px;
+            }
+
+            .container {
+                width: 95%;
+            }
+
+            .modal-content {
+                width: 95%;
+                max-width: 90%;
+                padding: 15px;
+            }
+
+            .modal {
+                align-items: flex-start; /* Ensures modal appears at the top */
+                padding-top: 60px; /* Prevents overlap with navbar */
+            }
+            .view-btn {
+                font-size: 14px; /* Adjust button size for smaller screens */
+                padding: 8px 12px;
+                margin-top: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div>
+            <a href="{% url 'home' %}" class="home-btn">Sahyadri Trails🏔️</a>
+        </div>
+        <div>
+            <a href="{% url 'explore_treks' %}">Explore</a>
+            <a href="{% url 'bookings_page' %}">Bookings</a>
+            <a href="{% url 'booking_details' %}">View Details</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'profile' %}">Profile</a>
+        </div>
+    </div>
+
+    <div class="overlay"></div>
+
+    <div class="container">
+        {% if user.is_authenticated %}
+        <h2>My Bookings</h2>
+        {% for booking in bookings %}
+            <div class="booking-card">
+                <div>
+                    <h3>{{ booking.trek.name }} Booking Confirmed</h3>
+                    <p><strong>Date:</strong> {{ booking.date }}</p>
+                </div>
+                <div class="buttons">
+                    <button class="btn view-btn" onclick="openModal('{{ booking.id }}')">View Details</button>
+                    <button class="btn download-btn" onclick="window.location.href='{% url 'download_booking' booking.id %}'">Download</button>
+                </div>
+            </div>
+
+            <div id="modal-{{ booking.id }}" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal('{{ booking.id }}')">&times;</span>
+                    <h2>Booking Details</h2>
+                    <p><strong>Name:</strong> {{ booking.name }}</p>
+                    <p><strong>Email:</strong> {{ booking.email }}</p>
+                    <p><strong>Date:</strong> {{ booking.date }}</p>
+                    <p><strong>Number of People:</strong> {{ booking.number_of_people }}</p>
+                    <p><strong>Total Price:</strong> ₹{{ booking.total_price }}</p><br/>
+
+                    <h2>Trek Details</h2>
+                    <p><strong>Trek Name:</strong> {{ booking.trek.name }}</p>
+                    <p><strong>Difficulty:</strong> {{ booking.trek.difficulty }}</p>
+                    <p><strong>Season:</strong> {{ booking.trek.season }}</p>
+                    <p><strong>Duration:</strong> {{ booking.trek.duration }}</p>
+                    <p><strong>Price:</strong> ₹{{ booking.trek.price }} per person</p>
+                    <p><strong>Pickup Location:</strong> {{ booking.trek.pickup_location }}</p>
+                    <p><strong>Drop Location:</strong> {{ booking.trek.drop_location }}</p>
+                    <p><strong>Meals Included:</strong> {{ booking.trek.meals }}</p>
+                    <p><strong>Description:</strong> {{ booking.trek.description }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p>No bookings found.</p>
+        {% endfor %}
+        {% else %}
+        <h2>You haven't logged in or Registered!</h2>
+            <div class="button-container">
+                <a href="{% url 'login' %}" class="btn">Login</a>
+                <a href="{% url 'register' %}" class="btn">Register</a>
+            </div>                    
+        {% endif %}
+    </div>
+
+    
+    <script>
+        function openModal(bookingId) {
+            document.getElementById('modal-' + bookingId).style.display = 'block';
+        }
+        function closeModal(bookingId) {
+            document.getElementById('modal-' + bookingId).style.display = 'none';
+        }
+    </script>
+</body>
+</html>
